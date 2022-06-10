@@ -31,8 +31,7 @@ Calculator::isValid(VS s)
         if (!(isNumber(c) || isOperator(c[0]) || c == "(" || c == ")" || c==" ")) {
             return false;
         }
-        ///4++5  ::error
-        //if (isOperator(c[0]) && ((isOperator((*(i + 1))[0]))) || (isOperator((*(i - 1))[0]))) return false;
+        if ((isOperator(c[0]) && (isOperator((*(i + 1))[0]))) ||  isOperator(c[0]) && (isOperator((*(i - 1))[0]))) return false;
         
         if (c == "(") {
             parenthesis.push(c);
@@ -95,7 +94,8 @@ Calculator::truncateString(std::string& s)
                 if ((isdigit(s[i - 1]) && isdigit(s[i + 1]))
                     || (s[i - 1] == ')' && isdigit(s[i + 1]))
                     || (s[i - 1] == ')' && s[i + 1] == '(')
-                    || (isdigit(s[i - 1]) && s[i + 1] == '(')) {
+                    || (isdigit(s[i - 1]) && s[i + 1] == '(')
+                    ||isOperator(s[i+1]) || isOperator(s[i-1])) {
                     s_new.push_back(s[i]);
                     s_new.push_back(' ');
                 }
@@ -103,9 +103,9 @@ Calculator::truncateString(std::string& s)
                     s_new.push_back(s[i]);
                 }
             }
-            else if (isOperator(s[i])  && i == 0) {
+            /*else if (isOperator(s[i])  && i == 0) {
                 s_new.push_back(s[i]);
-            }
+            }*/
             else {
                 s_new.push_back(s[i]);
                 s_new.push_back(' ');
