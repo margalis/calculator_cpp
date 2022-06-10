@@ -8,7 +8,7 @@ void
 Calculator::welcomeInstructions()
 {
     std::string welcome = "Welcome to ccallccullattorr v0.0.\n"
-                          "For negative values add 0 at the start of the equation.\n\n"
+                          "1.Write the equation without spaces inbetween the symbols.\n\n"                  
                           "Write the equation to calculate: ";
     std::cout << welcome << '\n';
 }
@@ -23,9 +23,31 @@ Calculator::inputEquation()
 }
 
 bool 
-Calculator::isValid(std::string& s)
+Calculator::isValid(VS s)
 {
-    ///TODO()
+    std::stack<std::string> parenthesis;
+    for (VS::const_iterator i = s.begin(); i != s.end(); ++i) {
+        std::string c = *i;
+        if (!(isNumber(c) || isOperator(c[0]) || c == "(" || c == ")" || c==" ")) {
+            return false;
+        }
+        ///4++5  ::error
+        //if (isOperator(c[0]) && ((isOperator((*(i + 1))[0]))) || (isOperator((*(i - 1))[0]))) return false;
+        
+        if (c == "(") {
+            parenthesis.push(c);
+        }
+        if (c == ")" ) {
+            if (parenthesis.empty()) {
+                return false;
+            }
+            parenthesis.pop();
+        }
+        if (c == "(" and *(i + 1) == ")" and s.size()==2) return false; // omg :D
+    }
+    if (!parenthesis.empty()) {
+        return false;
+    }
     return true;
 }
 
@@ -62,11 +84,6 @@ Calculator::isNumber(std::string s)
 std::string 
 Calculator::truncateString(std::string& s)
 {
-    if (!isValid(s)) {
-       std::cout << "Expression is not valid\n";
-       exit(0);
-        ///throw("Expression is not valid\n");
-    }
     std::string s_new;
     for (unsigned int i = 0; i < s.length(); ++i) {
         if (s[i] == ')'|| s[i] == '('
@@ -98,6 +115,7 @@ Calculator::truncateString(std::string& s)
             s_new.push_back(s[i]);
         }
     }
+    s_new.pop_back();
     return s_new;
 }
 
@@ -125,7 +143,7 @@ std::string
 Calculator::fromVectorToString(const std::vector<std::string>& v)
 {
     std::string str;
-    for (std::vector<std::string>::const_iterator i = v.begin(); i != v.end(); ++i) {
+    for (VS::const_iterator i = v.begin(); i != v.end(); ++i) {
         str += *i;
     }
     return str;
@@ -171,6 +189,10 @@ Calculator::stepCalculate(std::stack<double>& numbers, std::stack<char>& operato
 double
 Calculator::calculate(VS equation)
 {
+    if (!isValid(equation)) {
+        std::cout << "Equation is invalid.";
+        exit(0);
+    }
     std::stack<double> numbers; 
     std::stack<char> operators;
     std::string c;
@@ -205,6 +227,7 @@ Calculator::calculate(VS equation)
     }
     double result = numbers.top();
     numbers.pop();
+    /// empty every container 
     return result;  
 
 }

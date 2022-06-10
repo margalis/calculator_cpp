@@ -8,7 +8,7 @@ using VS = std::vector<std::string>;
 
 class Calculator {
 	
-	static bool isValid(std::string& s);
+	static bool isValid(VS s);
 	static int precedence(char currentOperator);
 	static int isOperator(char currentSymbol);
 	static int isNumber(std::string s);
