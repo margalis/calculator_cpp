@@ -1,4 +1,5 @@
-#pragma once
+#ifndef CALCULATOR_HPP
+#define CALCULATOR_HPP
 
 #include <vector>
 #include <stack>
@@ -15,7 +16,7 @@ class Calculator {
 
 	static std::string truncateString(std::string& s);
 	static VS fromStringToVector(std::string& s);
-	std::string fromVectorToString(const std::vector<std::string>& v); /// navsyaki
+	std::string fromVectorToString(const std::vector<std::string>& v); /// can be usefull
 	static double stepCalculate(std::stack<double>& numbers, std::stack<char>& operators);
 public:	
 	static void welcomeInstructions();
@@ -26,3 +27,5 @@ private:
 	Calculator() = delete;
 	~Calculator() = delete;
 };
+
+#endif
