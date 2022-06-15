@@ -8,7 +8,9 @@ void
 Calculator::welcomeInstructions()
 {
     std::string welcome = "Welcome to ccallccullattorr v0.0.\n"
-                          "1.Write the equation without spaces inbetween the symbols.\n\n"                  
+                          "1.Write the equation without spaces inbetween the symbols.\n"
+                          "2.For negative numbers write 0 at the start of equation.\n"
+                          "3.To exit enter: '()' .\n\n"                  
                           "Write the equation to calculate: ";
     std::cout << welcome << '\n';
 }
@@ -23,7 +25,7 @@ Calculator::inputEquation()
 }
 
 bool 
-Calculator::isValid(VS s)
+Calculator::isValid(VS s) /// not finished
 {
     std::stack<std::string> parenthesis;
     for (VS::const_iterator i = s.begin(); i != s.end(); ++i) {
@@ -31,7 +33,10 @@ Calculator::isValid(VS s)
         if (!(isNumber(c) || isOperator(c[0]) || c == "(" || c == ")" || c==" ")) {
             return false;
         }
-        if ((isOperator(c[0]) && (isOperator((*(i + 1))[0]))) ||  isOperator(c[0]) && (isOperator((*(i - 1))[0]))) return false;
+        ///  ///invalid a berum  (+_ , -1
+        if ((isOperator(c[0]) &&  i+1 != s.end() && (isOperator((*(i + 1))[0]))) 
+         ||  isOperator(c[0]) &&  i!=s.begin() && (isOperator((*(i - 1))[0])))
+            return false;
         
         if (c == "(") {
             parenthesis.push(c);
@@ -42,7 +47,8 @@ Calculator::isValid(VS s)
             }
             parenthesis.pop();
         }
-        if (c == "(" and *(i + 1) == ")" and s.size()==2) return false; // omg :D
+        if (c == "(" and *(i + 1) == ")") return false; 
+
     }
     if (!parenthesis.empty()) {
         return false;
@@ -83,8 +89,12 @@ Calculator::isNumber(std::string s)
 std::string 
 Calculator::truncateString(std::string& s)
 {
+    if (s._Equal("()")) {
+        std::cout << "bye!\n";
+        exit(0);
+    }
     std::string s_new;
-    for (unsigned int i = 0; i < s.length(); ++i) {
+    for (std::size_t i = 0; i < s.length(); ++i) {
         if (s[i] == ')'|| s[i] == '('
             || isOperator(s[i])
             || (isdigit(s[i]) && (!isdigit(s[i + 1]) && s[i + 1] != '.'))
@@ -124,7 +134,7 @@ Calculator::fromStringToVector(std::string& s)
 {   
     VS result;
     std::string temp = "";
-    for (int i = 0; i < s.length(); ++i) {
+    for (std::size_t i = 0; i < s.length(); ++i) {
 
         if (s[i] == ' ') {
             result.push_back(temp);
@@ -192,7 +202,9 @@ Calculator::calculate(VS equation)
     if (!isValid(equation)) {
         std::cout << "Equation is invalid.";
         exit(0);
+        /// handle with exceptions
     }
+    
     std::stack<double> numbers; 
     std::stack<char> operators;
     std::string c;
@@ -226,7 +238,7 @@ Calculator::calculate(VS equation)
             numbers.push(output);
     }
     double result = numbers.top();
-    numbers.pop();
+   /// numbers.pop();
     /// empty every container 
     return result;  
 
